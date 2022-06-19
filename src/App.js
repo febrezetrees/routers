@@ -1,23 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './Header';
+import Nav from './Nav';
+import Footer from './Footer';
+// Above: imported Components will be the Components that stay on the page, even when the others change
+import Home from './Home';
+import NewPost from './NewPost';
+import PostPage from './PostPage';
+import About from './About';
+//Above Components to show as part of the SPA
+import Missing from './Missing';
+//Above: Component to show 404 'Not Found' error
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      
     </div>
   );
 }
