@@ -15,19 +15,31 @@ import { /*BrowserRouter as Router,*/ Routes, Route, useNavigate } from 'react-r
 //Above updated for v6 react-router-dom (Cf. v5) changing Switch>Routes and component>element 
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+
 import api from './api/posts';
+import useAxiosFetch from './hooks/useAxiosFetch';
+import useWindowSize from './hooks/useWindowSize';
+
 
 function App() {
   const [posts, setPosts] = useState([])
-    const [search, setSearch] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [postTitle, setPostTitle] = useState('');
-    const [postBody, setPostBody] = useState('');
-    const [editTitle, setEditTitle] = useState('');
-    const [editBody, setEditBody] = useState('');
-    const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [postTitle, setPostTitle] = useState('');
+  const [postBody, setPostBody] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+  const [editBody, setEditBody] = useState('');
+  const navigate = useNavigate();
+  const { width } = useWindowSize();
+    
+  const { data, fetchError, isLoading } = useAxiosFetch('http://localhost:3500/posts'); //using full API url. Would need ot update on production version
+  
+  useEffect(() => {
+    setPosts(data);
+  }, [data])
 
-    useEffect(() => {
+    //replaced with custom hook - see useAxiosFetch
+    /*useEffect(() => {
       const fetchPosts = async () => {
         try {
           const response = await api.get('/posts'); //define API endpoint route - for json-server, the endpoint pathway is the relevant object name in the data/db.json folder, eg. "posts"
@@ -47,7 +59,7 @@ function App() {
         }
       }
     fetchPosts();
-    }, [])
+    }, [])*/
 
     useEffect(() => {
       const filteredResults = posts.filter((post) => // No {} means can only put one expression to the right, possibly connected with && or ||
@@ -103,13 +115,13 @@ function App() {
     return (
     <div className = "App">
       
-        <Header title="RouterTitle" />
+        <Header title="RouterTitle" width={width}/>
         <Nav 
           search={search}
           setSearch={setSearch}
         />
         <Routes>
-          <Route path = "/" element = {<Home posts={searchResults} />} />
+          <Route path = "/" element = {<Home posts={searchResults} fetchError={fetchError} isLoading={isLoading}/>} />
           <Route path = "/post" element = {
             <NewPost 
               handleSubmit={handleSubmit}
